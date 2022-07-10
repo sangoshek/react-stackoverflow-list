@@ -3,6 +3,7 @@ import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import express from 'express';
 import { renderToString } from 'react-dom/server';
+import users from './api/users';
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -45,16 +46,21 @@ export const renderApp = (req, res) => {
 }
 
 const server = express();
+
 server
   .disable('x-powered-by')
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
-  .get('/*', (req, res) => {
+  .get('/*', (req, res) => {    
     const {context, html} = renderApp(req, res);
     if (context.url) {
       res.redirect(context.url);
     } else {
       res.status(200).send(html);
     }
-  });
+});
+
+
+// server.get('/api/users', users)
+
 
 export default server;

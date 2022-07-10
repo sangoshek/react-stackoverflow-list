@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Stack, Typography, AppBar, TextField, Box} from '@mui/material';
 import { styled } from '@mui/system';
 import axios from 'axios';
-import './Home.css';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const questionListUrl = `https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&site=stackoverflow`
 
@@ -25,13 +25,25 @@ const SearchInput = styled(TextField)({
 })
 
 export default function Home(props) {
-    
+    const [isLoading, setIsLoading] = useState(true);
     const [questionList, setQuestionList] = useState([]);
+
+    const fetchMore = async () => {
+      if(isLoading) return
+      setIsLoading(true)
+      const results = await axios.get(questionListUrl).catch(e => console.log(e))
+      if(results){       
+        
+        setQuestionList(questionList.concat(results.data.items))
+        setIsLoading(false)
+      }
+    }
 
     const fetchQuestionList = async () => {
       const results = await axios.get(questionListUrl).catch(e => console.log(e))
       if(results){        
         setQuestionList(results.data.items)
+        setIsLoading(false)
       }
     }
 
@@ -49,13 +61,26 @@ export default function Home(props) {
             flexDirection="column"
             justifyContent="center"
             alignItems="flex-start"
+            style={{overflow:'auto'}}
             >            
-            {console.log(questionList)}
-            {questionList.length > 0 && questionList.map((item,key)=>(
-              <Box key={key}>
-                <Typography variant="h6" component='div'>{item.title}</Typography>
-              </Box>
-            ))}
+            <InfiniteScroll
+                pageStart={0}
+                loadMore={fetchMore}
+                hasMore={true}
+                threshold={50}
+                loader={<div className="loader" key={0}>Loading ...</div>}
+            >
+                {questionList.length > 0 && questionList.map((item,key)=>(
+                  <Stack 
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    key={key}>
+                    <Typography variant="h6" component='div'>{item.title}</Typography>
+                  </Stack>
+                ))}
+            </InfiniteScroll>
+            
             
           </Stack>
       </>
