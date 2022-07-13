@@ -3,7 +3,6 @@ import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import express from 'express';
 import { renderToString } from 'react-dom/server';
-import users from './api/users';
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -58,9 +57,6 @@ server
       res.status(200).send(html);
     }
 });
-
-
-// server.get('/api/users', users)
 
 
 export default server;
