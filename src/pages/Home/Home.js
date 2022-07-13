@@ -6,6 +6,7 @@ import Search from '../../components/Search/Search';
 import Tags from '../../components/Tags/Tags';
 import Question from '../../components/Question/Question';
 import InfiniteScroll from 'react-infinite-scroller';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const questionListUrl = `https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&site=stackoverflow&pagesize=20`
 const tagsListUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&site=stackoverflow&pagesize=10`
@@ -111,7 +112,7 @@ export default function Home(props) {
                 loadMore={handlefetchMore}
                 hasMore={hasMore}
                 threshold={50}
-                loader={<div className="loader" key={0}>Loading ...</div>}
+                loader={<ClipLoader key={0} loading={isLoading} size={50}/>}
             >
               {questionList.length > 0 && questionList.map((item,key)=><Question key={key} item={item}/>)}              
             </InfiniteScroll> 
