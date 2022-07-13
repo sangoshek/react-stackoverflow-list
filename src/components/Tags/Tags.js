@@ -16,7 +16,9 @@ export default function Tags({
         <Stack 
             flexDirection="row" 
             justifyContent="flex-start" 
-            alignItems="center">
+            alignItems="center"
+            flexWrap="wrap"
+            >
             {tagList && tagList.length > 0 && tagList.map((item,key)=>(
               <KeywordTag 
                 selected={item.name===selectedTag} 

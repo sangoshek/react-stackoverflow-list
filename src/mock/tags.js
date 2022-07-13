@@ -215,3 +215,5 @@ const tags = {
     "quota_max": 10000,
     "quota_remaining": 9843
   }
+
+  export { tags }

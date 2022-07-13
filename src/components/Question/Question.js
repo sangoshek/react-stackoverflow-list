@@ -1,8 +1,7 @@
 import React from 'react';
 import { Stack, Typography, Box, TextField} from '@mui/material';
-import { ProfileImage, ProfileImageWithoutImg} from './styled';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Author from '../Author/Author';
+import AnimatedNumber from './AnimatedNumber';
 
 export default function Question({
     item
@@ -11,50 +10,42 @@ export default function Question({
         <Stack 
             flexDirection="row"
             justifyContent="space-between"
-            alignItems="flex-start">
+            alignItems="center">
             
                 <Stack  
                 flexDirection="column"
                 justifyContent="flex-start"
                 alignItems="flex-start"
+                width={`80%`}
                 padding={2}>  
-                <Typography variant="h6" component='div'>
-                    <a href={item.link} rel="noopener noreferrer" target="_blank">{item.title}</a>
+                <Typography variant="h6" component='div' >
+                    <a 
+                        href={item.link} 
+                        rel="noopener noreferrer" 
+                        target="_blank" 
+                        style={{color:`purple`, textDecoration:`none`, fontSize:24}}>{item.title}</a>
                 </Typography>
                 <Stack  
                 flexDirection="row"
                 justifyContent="space-between"
-                alignItems="center">  
+                alignItems="center"
+                
+                >  
                     <Box marginX={2}>
                         <Typography variant="h6" component='div'>Score</Typography>
-                        <Typography variant="h6" component='div'>{item.score}</Typography>
+                        <AnimatedNumber number={item.score} isHighlighted={item.score < 0}/>
                     </Box>                    
-                    <Box marginX={2}>
+                    <Box marginX={2} padding={2} border={(!item.accepted_answer_id && item.answer_count > 1 ) && 2}>
                         <Typography variant="h6" component='div'>Answer</Typography>
-                        <Typography variant="h6" component='div'>{item.answer_count}</Typography>
+                        <AnimatedNumber number={item.answer_count} isHighlighted={item.accepted_answer_id && item.answer_count > 1}/>
                     </Box>                    
                     <Box marginX={2}>
                         <Typography variant="h6" component='div'>View</Typography>
-                        <Typography variant="h6" component='div'>{item.view_count}</Typography>
+                        <AnimatedNumber number={item.view_count}/>
                     </Box>  
                     </Stack>                  
                 </Stack>
-                <Box>  
-                {item.owner.profile_image
-                ? <LazyLoadImage
-                    alt={item.owner.display_name}
-                    height={52}
-                    effect="blur"
-                    src={item.owner.profile_image}
-                    width={52}
-                    style={{
-                        borderRadius: `50% 50%`,
-                        objectFit: 'cover',
-                        objectPosition: 'center'
-                    }}
-                    /> 
-                : <ProfileImageWithoutImg {...stringAvatar(item.owner.display_name)}/>}            
-                </Box>
+                <Author image={item.owner}/>
             </Stack>
     );
   

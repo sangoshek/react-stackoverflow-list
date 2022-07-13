@@ -6,7 +6,7 @@ import Search from '../../components/Search/Search';
 import Tags from '../../components/Tags/Tags';
 import Question from '../../components/Question/Question';
 import InfiniteScroll from 'react-infinite-scroller';
-import ClipLoader from "react-spinners/ClipLoader";
+
 
 const questionListUrl = `https://api.stackexchange.com/2.3/questions?order=desc&sort=activity&site=stackoverflow&pagesize=20`
 const tagsListUrl = `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&site=stackoverflow&pagesize=10`
@@ -104,18 +104,25 @@ export default function Home(props) {
           <Stack 
             flexDirection="column"
             justifyContent="center"
-            alignItems="flex-start"
+            alignItems="center"
             style={{overflow:'auto'}}
+            minHeight={`500px`}
             >    
+            { questionList.length > 0 &&
             <InfiniteScroll
                 pageStart={0}
                 loadMore={handlefetchMore}
                 hasMore={hasMore}
                 threshold={50}
-                loader={<ClipLoader key={0} loading={isLoading} size={50}/>}
+                loader={<Typography variant="body2" key={0}>Loading...</Typography>}
             >
               {questionList.length > 0 && questionList.map((item,key)=><Question key={key} item={item}/>)}              
             </InfiniteScroll> 
+            }
+
+            {questionList.length === 0 &&
+              <img src={`./loading.gif`} alt="loading..." style={{width: 80}}/>
+            }
           </Stack>
       </>
       
